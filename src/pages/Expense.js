@@ -7,8 +7,8 @@ function Expense() {
 
   const [itemName, setItemName] = useState("");
   const [shopName, setShopName] = useState("");
-  const [price, setPrice] = useState();
-  const [quantity, setQuantity] = useState();
+  const [price, setPrice] = useState(0);
+  const [quantity, setQuantity] = useState(0);
 
   const handleSubmit = (event) => {
     //Prevent page reload

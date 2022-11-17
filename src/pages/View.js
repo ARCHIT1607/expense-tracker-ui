@@ -1,6 +1,7 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 import Nav from "react-bootstrap/Nav";
+import './View.css';
 
 function View() {
   const items = [

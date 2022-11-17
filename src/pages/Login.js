@@ -1,60 +1,25 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
-import Register from "./Register";
+import Axios from "axios";
 function Login() {
-  // React States
-  const [errorMessages, setErrorMessages] = useState({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
   const navigate = useNavigate();
 
-  // User Login info
-  const database = [
-    {
-      username: "user1",
-      password: "pass1",
-    },
-    {
-      username: "user2",
-      password: "pass2",
-    },
-  ];
+  // React States
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
 
-  const errors = {
-    uname: "invalid username",
-    pass: "invalid password",
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (e) => {
     //Prevent page reload
-    event.preventDefault();
-
-    var { uname, pass } = document.forms[0];
-
-    // Find user login info
-    const userData = database.find((user) => user.username === uname.value);
-
-    // Compare user info
-    if (userData) {
-      if (userData.password !== pass.value) {
-        // Invalid password
-        setErrorMessages({ name: "pass", message: errors.pass });
-      } else {
-        setIsSubmitted(true);
-        navigate('/dashboard');
-      }
-    } else {
-      // Username not found
-      setErrorMessages({ name: "uname", message: errors.uname });
-    }
-  };
-
-  // Generate JSX code for error message
-  const renderErrorMessage = (name) =>
-    name === errorMessages.name && (
-      <div className="error">{errorMessages.message}</div>
+    e.preventDefault();
+    const res = await Axios(
+      window.API_URL + "/login?userName=" + username + "&password=" + password
     );
+    console.log(res.data);
+    res.data === "Success"
+      ? navigate("/dashboard")
+      : alert("password is incorrect");
+  };
 
   // JSX code for login form
   const renderForm = (
@@ -62,15 +27,31 @@ function Login() {
       <form onSubmit={handleSubmit}>
         <div className="input-container">
           <label>Username </label>
-          <input type="text" name="uname" required />
-          {renderErrorMessage("uname")}
+          <input
+            type="text"
+            name="username"
+            value={username}
+            onChange={(e) => {
+              setUserName(e.target.value);
+            }}
+            required
+          />
         </div>
         <div className="input-container">
           <label>Password </label>
-          <input type="password" name="pass" required />
-          {renderErrorMessage("pass")}
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            required
+          />
         </div>
-        <span style={{fontSize:"70%"}}><Link to="/register"> don't have an account?Sign here</Link></span>
+        <span style={{ fontSize: "70%" }}>
+          <Link to="/login"> Don't have an account?Register</Link>
+        </span>
         <div className="button-container">
           <input type="submit" />
         </div>
@@ -82,7 +63,7 @@ function Login() {
     <div className="app">
       <div className="login-form">
         <div className="title">Login</div>
-        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+        {renderForm}
       </div>
     </div>
   );
