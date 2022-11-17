@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Login.css";
-import Register from "./Register";
-function Login() {
+
+function Register() {
   // React States
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -67,7 +66,7 @@ function Login() {
           <input type="password" name="pass" required />
           {renderErrorMessage("pass")}
         </div>
-        <span style={{fontSize:"70%"}}><Link to="/register"> don't have an account?Sign here</Link></span>
+        <span style={{fontSize:"70%"}}><Link to="/login"> already have an account?Login</Link></span>
         <div className="button-container">
           <input type="submit" />
         </div>
@@ -78,11 +77,11 @@ function Login() {
   return (
     <div className="app">
       <div className="login-form">
-        <div className="title">Sign In</div>
+        <div className="title">Register</div>
         {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Register;
