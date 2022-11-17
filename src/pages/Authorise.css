@@ -1,0 +1,10 @@
+.container{
+    border: 1px solid black;
+    height: 50vh;
+
+}
+
+.row{
+    border: 1px solid black;
+    width: 100%;
+}
