@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { useNavigate } from "react-router-dom";
 function CustomNav() {
   //if user has logged in then show text or else show login page
-  const [isLogged, setIsLogged] = useState(false);
-
+  const userName = localStorage.getItem("username");
+  const navigate = useNavigate();
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -14,15 +15,26 @@ function CustomNav() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/expense">Add Items</Nav.Link>
-            <Nav.Link href="/view">View List</Nav.Link>
+            <Nav.Link href={"/view/" + (userName!=null?userName:"archit")}>
+              View Items
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
         <Navbar.Collapse className="justify-content-end">
-          {isLogged ? (
-            <Nav.Link href="#login">Login</Nav.Link>
+          {userName == null ? (
+            <Nav.Link href="/login">Login</Nav.Link>
           ) : (
             <Navbar.Text>
-              Signed in as: <a href="#login">Mark Otto</a>
+              Signed in as:{" "}
+              <a
+                href="#"
+                onClick={() => {
+                  localStorage.clear();
+                  navigate('/login');
+                }}
+              >
+                {userName}
+              </a>
             </Navbar.Text>
           )}
         </Navbar.Collapse>

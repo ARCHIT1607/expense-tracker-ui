@@ -16,11 +16,15 @@ function Login() {
       window.API_URL + "/login?userName=" + username + "&password=" + password
     );
     console.log(res.data);
-    res.data === "Success"
-      ? navigate("/dashboard")
-      : alert("password is incorrect");
+    if(res.data === "Success"){
+      localStorage.setItem('username',username);
+      console.log("username in login "+username)
+      navigate("/dashboard")
+    }else{
+      alert("password is incorrect");
+    }
   };
-
+  
   // JSX code for login form
   const renderForm = (
     <div className="form">
@@ -49,8 +53,8 @@ function Login() {
             required
           />
         </div>
-        <span style={{ fontSize: "70%" }}>
-          <Link to="/login"> Don't have an account?Register</Link>
+        <span style={{ fontSize: "100%" }}>
+          <Link to="/register"> Don't have an account?Register</Link>
         </span>
         <div className="button-container">
           <input type="submit" />

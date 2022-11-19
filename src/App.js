@@ -18,7 +18,7 @@ function App() {
         <Route exact path="login" element={<Login />} />
         <Route exact path="dashboard" element={<Dashboard />} />
         <Route exact path="expense" element={<Expense />} />
-        <Route exact path="view" element={<View />} />
+        <Route exact path="view/:user" element={<View />} />
       </Routes>
     </div>
   );

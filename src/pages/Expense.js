@@ -1,18 +1,32 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Expense.css";
+import Axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Expense() {
   const navigate = useNavigate();
-
+  const userName = localStorage.getItem("username");
   const [itemName, setItemName] = useState("");
   const [shopName, setShopName] = useState("");
-  const [price, setPrice] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+  const [price, setPrice] = useState();
+  const [quantity, setQuantity] = useState();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (e)=> {
     //Prevent page reload
-    event.preventDefault();
+    e.preventDefault();
+    const item = { itemName, quantity, price, shopName, userName };
+    console.log(item);
+    if (itemName !== "" && quantity !== 0 && price !== 0 && shopName !== "") {
+      await Axios.post(window.API_URL + "/addItem", item);
+      toast("Item was added to the list");
+    } else {
+      alert("Cannot Submit null data");
+    }
+
+    console.log("added");
+    window.location.reload(true);
   };
   return (
     <>
@@ -49,7 +63,6 @@ function Expense() {
               name="price"
               value={price}
               placeholder="Enter price of item"
-              min={0}
               onChange={(e) => {
                 setPrice(e.target.value);
               }}
@@ -67,7 +80,7 @@ function Expense() {
             />
           </div>
           <br></br>
-          <button type="button" className="btn btn-success">
+          <button type="submit" className="btn btn-success">
             Add
           </button>
         </form>
