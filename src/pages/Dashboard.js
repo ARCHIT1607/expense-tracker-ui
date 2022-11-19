@@ -96,7 +96,7 @@ function Dashboard() {
           <div className="col-lg-6">
             <CustomCard
               cardHeader={"Expense"}
-              cardTitle={"£"+data['expense']}
+              cardTitle={data["expense"]==null?"0":"£"+data['expense']}
               cardText={"Total money spent."}
             />
             &nbsp;&nbsp;
