@@ -12,7 +12,7 @@ function Login() {
   const handleSubmit = async (e) => {
     //Prevent page reload
     e.preventDefault();
-    const res = await Axios(
+    const res = await Axios.post(
       window.API_URL + "/login?userName=" + username + "&password=" + password
     );
     console.log(res.data);

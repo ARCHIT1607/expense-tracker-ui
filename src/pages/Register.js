@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 function Register() {
+
+  const navigate = useNavigate();
+
   // React States
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -12,6 +15,7 @@ function Register() {
     const tenant = { username, password };
     const res = await Axios.post(window.API_URL + "/register", tenant);
     console.log(res.data);
+    navigate("/login")
   };
 
   // JSX code for login form
