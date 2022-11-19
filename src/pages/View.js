@@ -138,7 +138,7 @@ function View() {
                   <td>{item.price}</td>
                   <td>{item.quantity}</td>
                   <td>
-                    <Nav.Link className="btn btn-info actionBtn" onClick={() => getItemById(item.id)}>
+                    <Nav.Link className="btn btn-info actionBtn"style={{color:"white"}} onClick={() => getItemById(item.id)}>
                       Edit
                     </Nav.Link>
                   </td>
@@ -146,6 +146,7 @@ function View() {
                     <Nav.Link
                       className="btn btn-danger actionBtn"
                       onClick={() =>{handleDelete(item.id)}}
+                      style={{color:"white"}}
                     >
                       Delete
                     </Nav.Link>
@@ -155,7 +156,7 @@ function View() {
             })}
         </tbody>
       </Table>
-      <p>SubTotal : {calculateTotal(itemDetail)}</p>
+      <b><p>SubTotal : {calculateTotal(itemDetail)}</p></b>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Item</Modal.Title>

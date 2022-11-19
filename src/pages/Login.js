@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import Axios from "axios";
@@ -24,6 +24,14 @@ function Login() {
       alert("password is incorrect");
     }
   };
+
+  useEffect(() => {
+    console.log(localStorage.getItem('username'))
+    if(localStorage.getItem('username')!=null){
+      navigate('/dashboard')
+    }
+  }, [])
+  
   
   // JSX code for login form
   const renderForm = (

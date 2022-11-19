@@ -32,6 +32,7 @@ function CustomNav() {
                   localStorage.clear();
                   navigate('/login');
                 }}
+                style={{textTransform:"uppercase"}}
               >
                 {userName}
               </a>
