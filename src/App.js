@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import CustomNav from "./components/CustomNav";
+import AdminDashboard from "./pages/AdminDashboard";
 import Dashboard from "./pages/Dashboard";
 import Expense from "./pages/Expense";
 import Login from "./pages/Login";

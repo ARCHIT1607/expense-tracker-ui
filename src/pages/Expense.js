@@ -4,6 +4,7 @@ import "./Expense.css";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import BulkUpload from "./BulkUpload";
 
 function Expense() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ function Expense() {
   const [price, setPrice] = useState();
   const [quantity, setQuantity] = useState();
 
-  const handleSubmit = async (e)=> {
+  const handleSubmit = async (e) => {
     //Prevent page reload
     e.preventDefault();
     const item = { itemName, quantity, price, shopName, userName };
@@ -80,10 +81,11 @@ function Expense() {
             />
           </div>
           <br></br>
-          <button type="submit" className="btn btn-success">
+          <button type="submit" className="btn btn-success" id="btn-addBtn">
             Add
           </button>
         </form>
+        <BulkUpload />
       </div>
     </>
   );

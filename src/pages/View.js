@@ -4,20 +4,19 @@ import Nav from "react-bootstrap/Nav";
 import "./View.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import SearchItem from "../components/SearchItem";
 import Axios from "axios";
 import { useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import UpdateForm from "../components/UpdateForm";
 function View() {
   const [show, setShow] = useState(false);
-
+  const userName = localStorage.getItem("username");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [Item, setItem] = useState([]);
 
-  const [fromDate, setFromDate] = useState();
-  const [toDate, setToDate] = useState();
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
   const { user } = useParams();
   const [itemDetail, setItemDetail] = useState([]);
 
@@ -44,7 +43,9 @@ function View() {
           "/filterItem?fromDate=" +
           fromDate +
           "&toDate=" +
-          toDate
+          toDate +
+          "&userName="+
+          userName
       );
       console.log("inside search");
       console.log(res.data);
@@ -52,6 +53,24 @@ function View() {
     } else {
       console.log("inside non search");
       getItems();
+    }
+  };
+
+  const downloadReport = async (e) => {
+    e.preventDefault();
+    console.log("from date "+fromDate + " toDate "+toDate)
+    if (fromDate && toDate) {
+      await Axios(
+        window.API_URL +
+          "/api/excel/download?fromDate=" +
+          fromDate +
+          "&toDate=" +
+          toDate +
+          "&userName=" +
+          userName
+      );
+    } else {
+      await Axios(window.API_URL + "/api/excel/download?fromDate=null&toDate=null&userName=" + userName);
     }
   };
 
@@ -76,7 +95,10 @@ function View() {
   return (
     <>
       <Form>
-        <div className="container viewFormContainer" style={{ marginTop: "20px" }}>
+        <div
+          className="container viewFormContainer"
+          style={{ marginTop: "20px" }}
+        >
           <div className="row">
             <div className="col-lg-2">
               <Form.Group className="mb-3">
@@ -85,7 +107,7 @@ function View() {
                   id="datePicker"
                   name="fromDate"
                   onChange={(e) => setFromDate(e.target.value)}
-                  style={{ height: "30px", width: "200px" }}
+                  style={{ height: "40px", width: "165px" }}
                 />
               </Form.Group>
             </div>
@@ -97,8 +119,8 @@ function View() {
                   name="toDate"
                   onChange={(e) => setToDate(e.target.value)}
                   style={{
-                    height: "30px",
-                    width: "200px",
+                    height: "40px",
+                    width: "165px",
                     marginRight: "20px",
                   }}
                 />
@@ -114,13 +136,33 @@ function View() {
               >
                 search
               </Button>
+              &nbsp;&nbsp;
+              <a
+                href={
+                  window.API_URL +
+                  "/api/excel/download?fromDate=" +
+                  fromDate+
+                  "&toDate=" +
+                  toDate+
+                  "&userName=" +
+                  userName
+                }
+              >
+                <Button
+                  variant="success"
+                  className="dateFormBtn"
+                  style={{ marginBottom: "20px" }}
+                >
+                  Download Report
+                </Button>
+              </a>
             </div>
           </div>
         </div>
       </Form>
       <Table striped bordered hover>
         <thead>
-          <tr>
+          <tr id="viewTr">
             <th>Item Name</th>
             <th>Shop Name</th>
             <th>Price</th>
@@ -138,15 +180,21 @@ function View() {
                   <td>{item.price}</td>
                   <td>{item.quantity}</td>
                   <td>
-                    <Nav.Link className="btn btn-info actionBtn"style={{color:"white"}} onClick={() => getItemById(item.id)}>
+                    <Nav.Link
+                      className="btn btn-info actionBtn"
+                      style={{ color: "white" }}
+                      onClick={() => getItemById(item.id)}
+                    >
                       Edit
                     </Nav.Link>
                   </td>
                   <td>
                     <Nav.Link
                       className="btn btn-danger actionBtn"
-                      onClick={() =>{handleDelete(item.id)}}
-                      style={{color:"white"}}
+                      onClick={() => {
+                        handleDelete(item.id);
+                      }}
+                      style={{ color: "white" }}
                     >
                       Delete
                     </Nav.Link>
@@ -156,7 +204,9 @@ function View() {
             })}
         </tbody>
       </Table>
-      <b><p>SubTotal : {calculateTotal(itemDetail)}</p></b>
+      <b>
+        <p>SubTotal : {calculateTotal(itemDetail)}</p>
+      </b>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Item</Modal.Title>

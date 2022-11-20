@@ -1,3 +1,5 @@
+
+
 @media only screen and (max-width: 600px) {
   * {
     font-size: 13px;
@@ -10,7 +12,8 @@
   }
   .actionBtn{
     width: 140%;
-    margin-left: -10px;
+    margin-left: -5px;
+    
   }
 
 }

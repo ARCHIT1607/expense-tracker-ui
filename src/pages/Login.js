@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import Axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function Login() {
   const navigate = useNavigate();
 
@@ -12,27 +14,38 @@ function Login() {
   const handleSubmit = async (e) => {
     //Prevent page reload
     e.preventDefault();
-    const res = await Axios.post(
-      window.API_URL + "/login?userName=" + username + "&password=" + password
-    );
-    console.log(res.data);
-    if(res.data === "Success"){
-      localStorage.setItem('username',username);
-      console.log("username in login "+username)
-      navigate("/dashboard")
-    }else{
-      alert("password is incorrect");
-    }
+      await Axios.post(
+        window.API_URL + "/login?userName=" + username + "&password=" + password
+      )
+        .then((response) => {
+          console.log(response.data);
+          console.log("inside success")
+          localStorage.setItem("username", username);
+          console.log("username in login " + username);
+          navigate("/dashboard");
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log("inside error")
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            // alert(error.response.data);
+            toast(error.response.data);
+          } else {
+            console.log("Error", error.message);
+          }
+        });
+
   };
 
   useEffect(() => {
-    console.log(localStorage.getItem('username'))
-    if(localStorage.getItem('username')!=null){
-      navigate('/dashboard')
+    console.log(localStorage.getItem("username"));
+    if (localStorage.getItem("username") != null) {
+      navigate("/dashboard");
     }
-  }, [])
-  
-  
+  }, []);
+
   // JSX code for login form
   const renderForm = (
     <div className="form">
@@ -76,6 +89,7 @@ function Login() {
       <div className="login-form">
         <div className="title">Login</div>
         {renderForm}
+        <ToastContainer/>
       </div>
     </div>
   );

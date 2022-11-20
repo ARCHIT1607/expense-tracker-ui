@@ -5,10 +5,9 @@ import CustomCard from "../components/CustomCard";
 import Axios from "axios";
 
 function Dashboard() {
-
   const [fromDate, setFromDate] = useState();
   const [toDate, setToDate] = useState();
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
   const userName = localStorage.getItem("username");
 
   const SearchItem = async (e) => {
@@ -20,7 +19,8 @@ function Dashboard() {
           fromDate +
           "&toDate=" +
           toDate +
-          "&userName="+userName
+          "&userName=" +
+          userName
       );
       console.log("inside search from dashboard");
       console.log(res.data);
@@ -28,27 +28,22 @@ function Dashboard() {
     } else {
       console.log("inside non search");
       const res = await Axios(
-        window.API_URL +
-          "/dashboard?userName="+userName
+        window.API_URL + "/dashboard?userName=" + userName
       );
       setData(res.data);
     }
   };
 
   const loadDashboard = async () => {
-      console.log("inside non search");
-      const res = await Axios(
-        window.API_URL +
-          "/dashboard?userName="+userName
-      );
-      setData(res.data);
+    console.log("inside non search");
+    const res = await Axios(window.API_URL + "/dashboard?userName=" + userName);
+    setData(res.data);
   };
 
   useEffect(() => {
     loadDashboard();
-  }, [])
-  
-  
+  }, []);
+
   return (
     <>
       {/* Search using date */}
@@ -61,17 +56,23 @@ function Dashboard() {
                 type="date"
                 name="startDate"
                 placeholder="start date"
-                onChange={(e)=>{
-                  setFromDate(e.target.value)
+                id="dateDashboard"
+                onChange={(e) => {
+                  setFromDate(e.target.value);
                 }}
               />
               &nbsp;&nbsp;
             </div>
             <div className="col-lg-6">
-              <Form.Control type="date" name="toDate" placeholder="end date"
-                onChange={(e)=>{
-                  setToDate(e.target.value)
-                }} />
+              <Form.Control
+                type="date"
+                name="toDate"
+                id="dateDashboard"
+                placeholder="end date"
+                onChange={(e) => {
+                  setToDate(e.target.value);
+                }}
+              />
             </div>
             &nbsp;&nbsp;
             <button type="submit" className="btn btn-info" onClick={SearchItem}>
@@ -88,7 +89,7 @@ function Dashboard() {
           <div className="col-lg-6">
             <CustomCard
               cardHeader={"Items Bought"}
-              cardTitle={data['itemCount']}
+              cardTitle={data["itemCount"]}
               cardText={"Total items bought."}
             />
             &nbsp;&nbsp;
@@ -96,7 +97,7 @@ function Dashboard() {
           <div className="col-lg-6">
             <CustomCard
               cardHeader={"Expense"}
-              cardTitle={data["expense"]==null?"0":"£"+data['expense']}
+              cardTitle={data["expense"] == null ? "0" : "£" + data["expense"]}
               cardText={"Total money spent."}
             />
             &nbsp;&nbsp;

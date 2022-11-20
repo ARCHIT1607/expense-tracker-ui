@@ -8,7 +8,8 @@ function CustomNav() {
   const userName = localStorage.getItem("username");
   const navigate = useNavigate();
   return (
-    <Navbar bg="light" expand="lg">
+    <>
+    {userName != null?<Navbar bg="light" expand="lg">
       <Container>
         <Navbar.Brand href="/dashboard">Expense Tracker</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -40,7 +41,8 @@ function CustomNav() {
           )}
         </Navbar.Collapse>
       </Container>
-    </Navbar>
+    </Navbar> : ""}
+    </>
   );
 }
 
