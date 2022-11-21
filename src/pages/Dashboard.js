@@ -3,8 +3,10 @@ import "./Dashboard.css";
 import { Form } from "react-bootstrap";
 import CustomCard from "../components/CustomCard";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [fromDate, setFromDate] = useState();
   const [toDate, setToDate] = useState();
   const [data, setData] = useState([]);
@@ -41,6 +43,9 @@ function Dashboard() {
   };
 
   useEffect(() => {
+    if(userName==null){
+      navigate('/login')
+    }
     loadDashboard();
   }, []);
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Expense.css";
 import Axios from "axios";
@@ -29,6 +29,15 @@ function Expense() {
     console.log("added");
     window.location.reload(true);
   };
+
+  useEffect(() => {
+    if(userName==null){
+      navigate('/login')
+    }
+  }, [])
+  
+
+
   return (
     <>
       <div>

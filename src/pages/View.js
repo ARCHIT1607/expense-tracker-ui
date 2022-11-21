@@ -5,10 +5,11 @@ import "./View.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import UpdateForm from "../components/UpdateForm";
 function View() {
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const userName = localStorage.getItem("username");
   const handleClose = () => setShow(false);
@@ -82,7 +83,11 @@ function View() {
   };
 
   useEffect(() => {
+    if(userName==null){
+      navigate('/login')
+    }else{
     getItems();
+    }
   }, []);
   var sum = 0;
 
