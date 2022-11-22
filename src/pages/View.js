@@ -8,6 +8,8 @@ import Axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import UpdateForm from "../components/UpdateForm";
+import Pagination from "../components/Pagination";
+
 function View() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
@@ -21,11 +23,29 @@ function View() {
   const { user } = useParams();
   const [itemDetail, setItemDetail] = useState([]);
 
+  // To hold the actual data
+  const [data, setData] = useState([]);
+
+  // User is currently on this page
+  const [currentPage, setCurrentPage] = useState(1);
+  // No of Records to be displayed on each page
+  const [recordsPerPage] = useState(10);
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+
+  // Records to be displayed on the current page
+  const currentRecords = data.slice(indexOfFirstRecord, indexOfLastRecord);
+
+  const nPages = Math.ceil(data.length / recordsPerPage);
+
   const getItems = async () => {
     console.log("user " + user);
     console.log("getItems getting called");
     const res = await Axios(window.API_URL + "/getAllItems/" + user);
     setItemDetail(res.data);
+    setData(res.data);
+    console.log("data size " + data.length);
   };
 
   const getItemById = async (id) => {
@@ -45,7 +65,7 @@ function View() {
           fromDate +
           "&toDate=" +
           toDate +
-          "&userName="+
+          "&userName=" +
           userName
       );
       console.log("inside search");
@@ -57,25 +77,29 @@ function View() {
     }
   };
 
-  const downloadReport = async (e) => {
-    e.preventDefault();
-    console.log("from date "+fromDate + " toDate "+toDate)
-    if (fromDate && toDate) {
-      await Axios(
-        window.API_URL +
-          "/api/excel/download?fromDate=" +
-          fromDate +
-          "&toDate=" +
-          toDate +
-          "&userName=" +
-          userName
-      );
-    } else {
-      await Axios(window.API_URL + "/api/excel/download?fromDate=null&toDate=null&userName=" + userName);
-    }
-  };
+  // const downloadReport = async (e) => {
+  //   e.preventDefault();
+  //   console.log("from date " + fromDate + " toDate " + toDate);
+  //   if (fromDate && toDate) {
+  //     await Axios(
+  //       window.API_URL +
+  //         "/api/excel/download?fromDate=" +
+  //         fromDate +
+  //         "&toDate=" +
+  //         toDate +
+  //         "&userName=" +
+  //         userName
+  //     );
+  //   } else {
+  //     await Axios(
+  //       window.API_URL +
+  //         "/api/excel/download?fromDate=null&toDate=null&userName=" +
+  //         userName
+  //     );
+  //   }
+  // };
 
-  const handleDelete = async (id, e) => {
+  const handleDelete = async (id) => {
     window.location.reload(false);
     console.log("inside Delete Item");
     console.log("id " + id);
@@ -83,10 +107,10 @@ function View() {
   };
 
   useEffect(() => {
-    if(userName==null){
-      navigate('/login')
-    }else{
-    getItems();
+    if (userName == null) {
+      navigate("/login");
+    } else {
+      getItems();
     }
   }, []);
   var sum = 0;
@@ -97,6 +121,7 @@ function View() {
     console.log(sum);
     return sum + "£";
   };
+
   return (
     <>
       <Form>
@@ -146,9 +171,9 @@ function View() {
                 href={
                   window.API_URL +
                   "/api/excel/download?fromDate=" +
-                  fromDate+
+                  fromDate +
                   "&toDate=" +
-                  toDate+
+                  toDate +
                   "&userName=" +
                   userName
                 }
@@ -176,8 +201,8 @@ function View() {
           </tr>
         </thead>
         <tbody>
-          {itemDetail &&
-            itemDetail.map((item) => {
+          {currentRecords &&
+            currentRecords.map((item) => {
               return (
                 <tr>
                   <td>{item.itemName}</td>
@@ -209,6 +234,13 @@ function View() {
             })}
         </tbody>
       </Table>
+      <div style={{ float: "right" }}>
+        <Pagination
+          nPages={nPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
       <b>
         <p>SubTotal : {calculateTotal(itemDetail)}</p>
       </b>
@@ -220,6 +252,7 @@ function View() {
           <UpdateForm user={Item} />
         </Modal.Body>
       </Modal>
+
     </>
   );
 }
