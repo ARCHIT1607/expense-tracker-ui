@@ -20,14 +20,25 @@ function Expense() {
     const item = { itemName, quantity, price, shopName, userName };
     console.log(item);
     if (itemName !== "" && quantity !== 0 && price !== 0 && shopName !== "") {
-      await Axios.post(window.API_URL + "/addItem", item);
-      toast("Item was added to the list");
-    } else {
-      alert("Cannot Submit null data");
-    }
-
+      await Axios.post(window.API_URL + "/addItem", item).then((response) => {
+        console.log(response.data);
+        console.log("added success")
+        toast("Item was added to the list");
+      }).catch((error) => {
+      if (error.response) {
+        console.log("inside error")
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        // alert(error.response.data);
+        toast(error.response.data);
+      } else {
+        console.log("Error", error.message);
+      }
+    });
+  }
     console.log("added");
-    window.location.reload(true);
+    // window.location.reload(true);
   };
 
   useEffect(() => {

@@ -94,7 +94,7 @@ function Dashboard() {
           <div className="col-lg-6">
             <CustomCard
               cardHeader={"Items Bought"}
-              cardTitle={data["itemCount"]}
+              cardTitle={data["itemcount"]}
               cardText={"Total items bought."}
             />
             &nbsp;&nbsp;

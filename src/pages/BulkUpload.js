@@ -32,7 +32,7 @@ function BulkUpload() {
         <h2>Bulk Upload</h2>
         <p>This functionality helps to add multiple items in an excel</p>
         <p>Please click on the link to download the template</p>
-        <a href="http://localhost:8080/api/excel/download">Download Template</a>
+        <a href="http://localhost:8080/api/excel/downloadTemplate">Download Template</a>
         <form>
           <br></br>
           <br></br>

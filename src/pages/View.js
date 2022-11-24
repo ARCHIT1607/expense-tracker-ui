@@ -20,8 +20,9 @@ function View() {
 
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
+  const [searchByItemName, setSearchByItemName] = useState('')
+  
   const { user } = useParams();
-  const [itemDetail, setItemDetail] = useState([]);
 
   // To hold the actual data
   const [data, setData] = useState([]);
@@ -43,7 +44,6 @@ function View() {
     console.log("user " + user);
     console.log("getItems getting called");
     const res = await Axios(window.API_URL + "/getAllItems/" + user);
-    setItemDetail(res.data);
     setData(res.data);
     console.log("data size " + data.length);
   };
@@ -58,7 +58,7 @@ function View() {
 
   const SearchItem = async (e) => {
     e.preventDefault();
-    if (fromDate && toDate) {
+    // if (fromDate && toDate) {
       const res = await Axios(
         window.API_URL +
           "/filterItem?fromDate=" +
@@ -66,38 +66,16 @@ function View() {
           "&toDate=" +
           toDate +
           "&userName=" +
-          userName
+          userName +
+          "&itemName="+
+          searchByItemName
       );
-      console.log("inside search");
-      console.log(res.data);
-      setItemDetail(res.data);
-    } else {
-      console.log("inside non search");
-      getItems();
-    }
+      setData(res.data);
+    // } else {
+    //   console.log("inside non search");
+    //   getItems();
+    // }
   };
-
-  // const downloadReport = async (e) => {
-  //   e.preventDefault();
-  //   console.log("from date " + fromDate + " toDate " + toDate);
-  //   if (fromDate && toDate) {
-  //     await Axios(
-  //       window.API_URL +
-  //         "/api/excel/download?fromDate=" +
-  //         fromDate +
-  //         "&toDate=" +
-  //         toDate +
-  //         "&userName=" +
-  //         userName
-  //     );
-  //   } else {
-  //     await Axios(
-  //       window.API_URL +
-  //         "/api/excel/download?fromDate=null&toDate=null&userName=" +
-  //         userName
-  //     );
-  //   }
-  // };
 
   const handleDelete = async (id) => {
     window.location.reload(false);
@@ -115,9 +93,10 @@ function View() {
   }, []);
   var sum = 0;
 
-  const calculateTotal = (itemDetail) => {
+  const calculateTotal = (itemdata) => {
     console.log("inside calculate");
-    itemDetail.forEach((subData) => (sum += subData.price));
+    console.log("data "+itemdata)
+    itemdata.forEach((subData) => (sum += subData.price));
     console.log(sum);
     return sum + "£";
   };
@@ -137,7 +116,7 @@ function View() {
                   id="datePicker"
                   name="fromDate"
                   onChange={(e) => setFromDate(e.target.value)}
-                  style={{ height: "40px", width: "165px" }}
+                  style={{ height: "100%", width: "100%" }}
                 />
               </Form.Group>
             </div>
@@ -150,13 +129,29 @@ function View() {
                   onChange={(e) => setToDate(e.target.value)}
                   style={{
                     height: "40px",
-                    width: "165px",
+                    width: "100%",
                     marginRight: "20px",
                   }}
                 />
               </Form.Group>
             </div>
-            <div className="col-lg-4">
+
+            <div className="col-lg-2">
+              <Form.Group className="mb-3">
+                <Form.Control
+                  type="text"
+                  id="searchByItemName"
+                  name="searchByItemName"
+                  placeholder="item Name"
+                  onChange={(e) => setSearchByItemName(e.target.value)}
+                  style={{
+                    height: "40px",
+                    width: "100%",
+                  }}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-lg-6">
               <Button
                 variant="primary"
                 type="submit"
@@ -175,7 +170,9 @@ function View() {
                   "&toDate=" +
                   toDate +
                   "&userName=" +
-                  userName
+                  userName +
+                  "&itemName=" +
+                  searchByItemName
                 }
               >
                 <Button
@@ -242,7 +239,7 @@ function View() {
         />
       </div>
       <b>
-        <p>SubTotal : {calculateTotal(itemDetail)}</p>
+        <p>SubTotal : {calculateTotal(currentRecords)}</p>
       </b>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
