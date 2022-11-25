@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import UpdateForm from "../components/UpdateForm";
 import Pagination from "../components/Pagination";
+import { ToastContainer, toast } from "react-toastify";
 
 function View() {
   const navigate = useNavigate();
@@ -18,8 +19,8 @@ function View() {
   const handleShow = () => setShow(true);
   const [Item, setItem] = useState([]);
 
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
   const [searchByItemName, setSearchByItemName] = useState('')
   
   const { user } = useParams();
@@ -58,7 +59,9 @@ function View() {
 
   const SearchItem = async (e) => {
     e.preventDefault();
-    // if (fromDate && toDate) {
+    if ((fromDate == '' && toDate!='')|| (fromDate != '' && toDate == '')) {
+      toast("Please fill both date");
+    } else{
       const res = await Axios(
         window.API_URL +
           "/filterItem?fromDate=" +
@@ -71,6 +74,7 @@ function View() {
           searchByItemName
       );
       setData(res.data);
+    }
     // } else {
     //   console.log("inside non search");
     //   getItems();
@@ -103,6 +107,7 @@ function View() {
 
   return (
     <>
+    <ToastContainer></ToastContainer>
       <Form>
         <div
           className="container viewFormContainer"

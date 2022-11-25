@@ -4,17 +4,21 @@ import { Form } from "react-bootstrap";
 import CustomCard from "../components/CustomCard";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [fromDate, setFromDate] = useState();
-  const [toDate, setToDate] = useState();
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
   const [data, setData] = useState([]);
   const userName = localStorage.getItem("username");
 
   const SearchItem = async (e) => {
     e.preventDefault();
-    if (fromDate && toDate) {
+    console.log("from "+fromDate + " toDate "+toDate)
+    if ((fromDate == '' && toDate!='')|| (fromDate != '' && toDate == '')) {
+      toast("Please fill both date");
+    } else {
       const res = await Axios(
         window.API_URL +
           "/filterDashboard?fromDate=" +
@@ -27,13 +31,13 @@ function Dashboard() {
       console.log("inside search from dashboard");
       console.log(res.data);
       setData(res.data);
-    } else {
-      console.log("inside non search");
-      const res = await Axios(
-        window.API_URL + "/dashboard?userName=" + userName
-      );
-      setData(res.data);
     }
+    // } else {
+    //   console.log("inside non search");
+    //   const res = await Axios(
+    //     window.API_URL + "/dashboard?userName=" + userName
+    //   );
+    //   setData(res.data);
   };
 
   const loadDashboard = async () => {
@@ -43,14 +47,15 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    if(userName==null){
-      navigate('/login')
+    if (userName == null) {
+      navigate("/login");
     }
     loadDashboard();
   }, []);
 
   return (
     <>
+      <ToastContainer></ToastContainer>
       {/* Search using date */}
       <br></br>
       <div className="container">
