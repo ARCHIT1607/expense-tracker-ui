@@ -38,7 +38,7 @@ function Expense() {
     });
   }
     console.log("added");
-    // window.location.reload(true);
+    window.location.reload(true);
   };
 
   useEffect(() => {
@@ -82,6 +82,9 @@ function Expense() {
             <input
               type="number"
               name="price"
+              min={0}
+              id="expenseInputNumber"
+              step="any"
               value={price}
               placeholder="Enter price of item"
               onChange={(e) => {
@@ -92,6 +95,8 @@ function Expense() {
             <input
               type="number"
               name="quantity"
+              step="any"
+              id="expenseInputNumber"
               value={quantity}
               placeholder="Enter quantity of item"
               min={0}

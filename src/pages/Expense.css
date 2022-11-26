@@ -5,7 +5,7 @@
   padding: 10px;
 }
 
-input[type="number"] {
+#expenseInputNumber[type="number"] {
   height: 50px;
   width: 45%;
   border-radius: 10px;
