@@ -4,9 +4,6 @@
   * {
     font-size: 13px;
   }
-  input[type="date"] {
-    margin-left: 25%;
-  }
   .dateFormBtn {
     margin-right: 35%;
   }
@@ -17,6 +14,9 @@
   }
   #searchByItemName{
     margin-left: 25%;
+  }
+  #dateData{
+    font-size: 10px;
   }
 
 }

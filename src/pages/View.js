@@ -19,10 +19,11 @@ function View() {
   const handleShow = () => setShow(true);
   const [Item, setItem] = useState([]);
 
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [searchByItemName, setSearchByItemName] = useState('')
-  
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [searchByItemName, setSearchByItemName] = useState([]);
+  const [itemNameFilter, setItemNameFilter] = useState("");
+
   const { user } = useParams();
 
   // To hold the actual data
@@ -42,10 +43,14 @@ function View() {
   const nPages = Math.ceil(data.length / recordsPerPage);
 
   const getItems = async () => {
-    console.log("user " + user);
-    console.log("getItems getting called");
     const res = await Axios(window.API_URL + "/getAllItems/" + user);
     setData(res.data);
+    console.log("data size " + data.length);
+  };
+
+  const getItemNameFilter = async () => {
+    const res = await Axios(window.API_URL + "/getAllItemName/" + user);
+    setSearchByItemName(res.data);
     console.log("data size " + data.length);
   };
 
@@ -59,9 +64,13 @@ function View() {
 
   const SearchItem = async (e) => {
     e.preventDefault();
-    if ((fromDate == '' && toDate!='')|| (fromDate != '' && toDate == '')) {
+    console.log("itemNameFIlter " + itemNameFilter);
+    if (
+      (fromDate === "" && toDate !== "") ||
+      (fromDate !== "" && toDate === "")
+    ) {
       toast("Please fill both date");
-    } else{
+    } else {
       const res = await Axios(
         window.API_URL +
           "/filterItem?fromDate=" +
@@ -70,21 +79,15 @@ function View() {
           toDate +
           "&userName=" +
           userName +
-          "&itemName="+
-          searchByItemName
+          "&itemName=" +
+          itemNameFilter
       );
       setData(res.data);
     }
-    // } else {
-    //   console.log("inside non search");
-    //   getItems();
-    // }
   };
 
   const handleDelete = async (id) => {
     window.location.reload(false);
-    console.log("inside Delete Item");
-    console.log("id " + id);
     await Axios.delete(window.API_URL + "/deleteItem/" + id);
   };
 
@@ -93,13 +96,14 @@ function View() {
       navigate("/login");
     } else {
       getItems();
+      getItemNameFilter();
     }
   }, []);
   var sum = 0;
 
   const calculateTotal = (itemdata) => {
     console.log("inside calculate");
-    console.log("data "+itemdata)
+    console.log("data " + itemdata);
     itemdata.forEach((subData) => (sum += subData.price));
     console.log(sum);
     return sum + "£";
@@ -107,7 +111,7 @@ function View() {
 
   return (
     <>
-    <ToastContainer></ToastContainer>
+      <ToastContainer></ToastContainer>
       <Form>
         <div
           className="container viewFormContainer"
@@ -121,7 +125,7 @@ function View() {
                   id="datePicker"
                   name="fromDate"
                   onChange={(e) => setFromDate(e.target.value)}
-                  style={{ height: "100%", width: "100%" }}
+                  style={{ height: "40px", width: "100%" }}
                 />
               </Form.Group>
             </div>
@@ -142,20 +146,21 @@ function View() {
             </div>
 
             <div className="col-lg-2">
-              <Form.Group className="mb-3">
-                <Form.Control
-                  type="text"
-                  id="searchByItemName"
-                  name="searchByItemName"
-                  placeholder="item Name"
-                  onChange={(e) => setSearchByItemName(e.target.value)}
-                  style={{
-                    height: "40px",
-                    width: "100%",
-                  }}
-                />
-              </Form.Group>
+              <Form.Select
+                size="lg"
+                aria-label="Default select example"
+                style={{
+                  height: "50px",
+                  width: "100%",
+                }}
+                onChange={(e) => setItemNameFilter(e.target.value)}
+              >
+                {searchByItemName.map((item) => {
+                  return <option value={item.itemname}>{item.itemname}</option>;
+                })}
+              </Form.Select>
             </div>
+
             <div className="col-lg-6">
               <Button
                 variant="primary"
@@ -177,7 +182,7 @@ function View() {
                   "&userName=" +
                   userName +
                   "&itemName=" +
-                  searchByItemName
+                  itemNameFilter
                 }
               >
                 <Button
@@ -195,6 +200,7 @@ function View() {
       <Table striped bordered hover>
         <thead>
           <tr id="viewTr">
+            <th>Date</th>
             <th>Item Name</th>
             <th>Shop Name</th>
             <th>Price</th>
@@ -207,6 +213,7 @@ function View() {
             currentRecords.map((item) => {
               return (
                 <tr>
+                  <td id="dateData">{item.createdDate}</td>
                   <td>{item.itemName}</td>
                   <td>{item.shopName}</td>
                   <td>{item.price}</td>
@@ -254,7 +261,6 @@ function View() {
           <UpdateForm user={Item} />
         </Modal.Body>
       </Modal>
-
     </>
   );
 }

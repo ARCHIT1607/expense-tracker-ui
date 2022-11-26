@@ -16,7 +16,7 @@ function Dashboard() {
   const SearchItem = async (e) => {
     e.preventDefault();
     console.log("from "+fromDate + " toDate "+toDate)
-    if ((fromDate == '' && toDate!='')|| (fromDate != '' && toDate == '')) {
+    if ((fromDate === '' && toDate!=='')|| (fromDate !== '' && toDate === '')) {
       toast("Please fill both date");
     } else {
       const res = await Axios(
@@ -32,16 +32,9 @@ function Dashboard() {
       console.log(res.data);
       setData(res.data);
     }
-    // } else {
-    //   console.log("inside non search");
-    //   const res = await Axios(
-    //     window.API_URL + "/dashboard?userName=" + userName
-    //   );
-    //   setData(res.data);
   };
 
   const loadDashboard = async () => {
-    console.log("inside non search");
     const res = await Axios(window.API_URL + "/dashboard?userName=" + userName);
     setData(res.data);
   };
@@ -112,14 +105,6 @@ function Dashboard() {
             />
             &nbsp;&nbsp;
           </div>
-          {/* <div className="col-lg-4">
-            <CustomCard
-              cardHeader={"Users"}
-              cardTitle={"3"}
-              cardText={"No of users registered till."}
-            />
-            &nbsp;&nbsp;
-          </div> */}
         </div>
       </div>
       {/* End of cards */}
