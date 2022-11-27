@@ -155,6 +155,7 @@ function View() {
                 }}
                 onChange={(e) => setItemNameFilter(e.target.value)}
               >
+                <option></option>
                 {searchByItemName.map((item) => {
                   return <option value={item.itemname}>{item.itemname}</option>;
                 })}
