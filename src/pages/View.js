@@ -104,7 +104,7 @@ function View() {
   const calculateTotal = (itemdata) => {
     console.log("inside calculate");
     console.log("data " + itemdata);
-    itemdata.forEach((subData) => (sum += subData.price));
+    itemdata.forEach((subData) => (sum += subData.price * subData.quantity));
     console.log(sum);
     return sum + "£";
   };
