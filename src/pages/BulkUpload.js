@@ -8,7 +8,7 @@ function BulkUpload() {
     console.log("file " + file);
     const formData = new FormData();
     formData.append("file", file.selectedFile, file.selectedFile.name);
-    fetch("http://localhost:8080/api/excel/upload?userName=" + userName, {
+    fetch(window.API_URL+"/api/excel/upload?userName=" + userName, {
       method: "post",
       body: formData,
     }).then((res) => {
@@ -20,7 +20,7 @@ function BulkUpload() {
   };
 
   const DownloadTemplate = () => {
-    fetch("http://localhost:8080/api/excel/downloadTemplate", {
+    fetch(window.API_URL+"/api/excel/downloadTemplate", {
       method: "get",
     });
   };
@@ -32,7 +32,7 @@ function BulkUpload() {
         <h2>Bulk Upload</h2>
         <p>This functionality helps to add multiple items in an excel</p>
         <p>Please click on the link to download the template</p>
-        <a href="http://localhost:8080/api/excel/downloadTemplate">Download Template</a>
+        <a href={window.API_URL+"/api/excel/downloadTemplate"}>Download Template</a>
         <form>
           <br></br>
           <br></br>
