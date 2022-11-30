@@ -106,7 +106,7 @@ function View() {
     console.log("data " + itemdata);
     itemdata.forEach((subData) => (sum += subData.price * subData.quantity));
     console.log(sum);
-    return sum + "£";
+    return sum.toFixed(2) + "£";
   };
 
   return (
@@ -252,7 +252,7 @@ function View() {
         />
       </div>
       <b>
-        <p>SubTotal : {calculateTotal(currentRecords)}</p>
+        <p>SubTotal : {calculateTotal(data)}</p>
       </b>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
