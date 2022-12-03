@@ -62,6 +62,7 @@ function Expense() {
               value={itemName}
               placeholder="Enter name of item"
               id="inputText"
+              required
               onChange={(e) => {
                 setItemName(e.target.value);
               }}
@@ -73,6 +74,7 @@ function Expense() {
               value={shopName}
               placeholder="Enter name of shop"
               id="inputText"
+              required
               onChange={(e) => {
                 setShopName(e.target.value);
               }}
@@ -87,6 +89,7 @@ function Expense() {
               step="any"
               value={price}
               placeholder="Enter price of item"
+              required
               onChange={(e) => {
                 setPrice(e.target.value);
               }}
@@ -100,6 +103,7 @@ function Expense() {
               value={quantity}
               placeholder="Enter quantity of item"
               min={0}
+              required
               onChange={(e) => {
                 setQuantity(e.target.value);
               }}

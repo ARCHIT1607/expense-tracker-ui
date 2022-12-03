@@ -56,6 +56,7 @@ function UpdateForm({ user }) {
             <input
               type="number"
               name="price"
+              step="any"
               value={User.price}
               placeholder="Enter price of item"
               min={0}
@@ -65,6 +66,7 @@ function UpdateForm({ user }) {
             <input
               type="number"
               name="quantity"
+              step="any"
               value={User.quantity}
               placeholder="Enter quantity of item"
               min={0}

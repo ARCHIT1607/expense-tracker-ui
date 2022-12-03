@@ -87,8 +87,9 @@ function View() {
   };
 
   const handleDelete = async (id) => {
-    window.location.reload(false);
+    // window.location.reload(false);
     await Axios.delete(window.API_URL + "/deleteItem/" + id);
+    getItems();
   };
 
   useEffect(() => {
