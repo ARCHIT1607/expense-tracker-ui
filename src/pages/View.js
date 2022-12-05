@@ -23,6 +23,8 @@ function View() {
   const [toDate, setToDate] = useState("");
   const [searchByItemName, setSearchByItemName] = useState([]);
   const [itemNameFilter, setItemNameFilter] = useState("");
+  const [shopNameFilter, setShopNameFilter] = useState("");
+  const [searchByShopName, setSearchByShopName] = useState([]);
 
   const { user } = useParams();
 
@@ -54,6 +56,12 @@ function View() {
     console.log("data size " + data.length);
   };
 
+  const getShopNameFilter = async () => {
+    const res = await Axios(window.API_URL + "/getAllShopName/" + user);
+    setSearchByShopName(res.data);
+    console.log("data size " + data.length);
+  };
+
   const getItemById = async (id) => {
     console.log("itemDetail id ", id);
     const res = await Axios(window.API_URL + "/getItemById/" + id);
@@ -80,7 +88,9 @@ function View() {
           "&userName=" +
           userName +
           "&itemName=" +
-          itemNameFilter
+          itemNameFilter +
+          "&shopName=" +
+          shopNameFilter
       );
       setData(res.data);
     }
@@ -98,6 +108,7 @@ function View() {
     } else {
       getItems();
       getItemNameFilter();
+      getShopNameFilter();
     }
   }, []);
   var sum = 0;
@@ -163,7 +174,25 @@ function View() {
               </Form.Select>
             </div>
 
-            <div className="col-lg-6">
+            <div className="col-lg-2">
+              <Form.Select
+                size="lg"
+                aria-label="Default select example"
+                style={{
+                  height: "50px",
+                  width: "100%",
+                }}
+                onChange={(e) => setShopNameFilter(e.target.value)}
+                placeholder="Shop Name"
+              >
+                <option></option>
+                {searchByShopName.map((item) => {
+                  return <option value={item.shopname}>{item.shopname}</option>;
+                })}
+              </Form.Select>
+            </div>
+
+            <div className="col-lg-4">
               <Button
                 variant="primary"
                 type="submit"
@@ -184,7 +213,9 @@ function View() {
                   "&userName=" +
                   userName +
                   "&itemName=" +
-                  itemNameFilter
+                  itemNameFilter +
+                  "&shopName=" +
+                  shopNameFilter
                 }
               >
                 <Button
